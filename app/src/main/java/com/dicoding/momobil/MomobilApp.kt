@@ -58,9 +58,7 @@ fun MomobilApp(
         )
       }
       composable("About") {
-        AboutScreen(
-          navigation = navController
-        )
+        AboutScreen()
       }
       composable("Cart") {
         CartScreen(
