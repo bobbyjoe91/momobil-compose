@@ -9,6 +9,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.dicoding.momobil.ui.components.Drawer
 import com.dicoding.momobil.ui.components.Header
@@ -25,20 +26,25 @@ fun MomobilApp(
 ) {
   val scaffoldState = rememberScaffoldState()
   val coroutineScope = rememberCoroutineScope()
+  val backStack = navController.currentBackStackEntryAsState()
 
   Scaffold(
     scaffoldState = scaffoldState,
     modifier = modifier,
-    drawerContent = { Drawer(
-      navigation = navController,
-      scaffoldState = scaffoldState,
-      coroutineScope = coroutineScope
-    ) },
+    drawerContent = {
+      Drawer(
+        navigation = navController,
+        scaffoldState = scaffoldState,
+        coroutineScope = coroutineScope
+      )
+    },
     drawerGesturesEnabled = scaffoldState.drawerState.isOpen,
     topBar = {
       Header(
+        currentRoute = backStack.value?.destination?.route ?: "",
+        navigation = navController,
         scaffoldState = scaffoldState,
-        coroutineScope = coroutineScope
+        coroutineScope = coroutineScope,
       )
     }
   ) {
