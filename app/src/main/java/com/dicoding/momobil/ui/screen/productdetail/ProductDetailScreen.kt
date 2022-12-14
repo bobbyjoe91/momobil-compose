@@ -3,6 +3,7 @@ package com.dicoding.momobil.ui.screen.productdetail
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,7 +12,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -19,13 +22,17 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import coil.compose.AsyncImage
 import com.dicoding.momobil.di.Injector
 import com.dicoding.momobil.ui.ViewModelFactory
 import com.dicoding.momobil.ui.common.Helpers
 import com.dicoding.momobil.ui.common.UiState
 import com.dicoding.momobil.ui.theme.MomobilTheme
 import com.dicoding.momobil.ui.theme.TaxiSoftRed
+import com.google.accompanist.pager.ExperimentalPagerApi
+import com.google.accompanist.pager.HorizontalPager
 
+@OptIn(ExperimentalPagerApi::class)
 @Composable
 fun ProductDetailScreen(
   productId: Int,
@@ -46,6 +53,7 @@ fun ProductDetailScreen(
     }
     is UiState.Success -> {
       val productDetail = uiState.data
+      val imagesSize = uiState.data.images.size
 
       Column(
         modifier = modifier
@@ -53,6 +61,28 @@ fun ProductDetailScreen(
           .background(color = Color(0xFFECECEC))
           .verticalScroll(rememberScrollState()),
       ) {
+        HorizontalPager(
+          count = imagesSize
+        ) { index ->
+          Box {
+            AsyncImage(
+              model = uiState.data.images[index],
+              contentDescription = "Product image $index",
+              contentScale = ContentScale.Crop,
+              modifier = modifier
+                .fillMaxWidth()
+                .height(290.dp)
+            )
+            Text(
+              "${index+1} / $imagesSize",
+              modifier = modifier
+                .background(Color.LightGray)
+                .padding(2.dp)
+                .clip(RoundedCornerShape(2.dp))
+                .align(Alignment.BottomEnd)
+            )
+          }
+        }
         Column(
           modifier = modifier
             .fillMaxWidth()
