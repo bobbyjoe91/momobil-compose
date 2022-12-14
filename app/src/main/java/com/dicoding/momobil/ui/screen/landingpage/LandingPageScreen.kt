@@ -119,7 +119,10 @@ fun LandingPageScreen(
               name = productData.name,
               imgUrl = productData.images[0],
               location = productData.location,
-              price = productData.price
+              price = productData.price,
+              modifier = modifier.clickable {
+                navigation.navigate("ProductDetail/${productData.id}")
+              }
             )
           }
         }
