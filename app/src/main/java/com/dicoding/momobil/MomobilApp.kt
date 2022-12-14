@@ -7,10 +7,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.dicoding.momobil.ui.components.Drawer
 import com.dicoding.momobil.ui.components.Header
 import com.dicoding.momobil.ui.screen.about.AboutScreen
@@ -58,8 +60,13 @@ fun MomobilApp(
           navigation = navController
         )
       }
-      composable("ProductDetail") {
+      composable(
+        "ProductDetail/{id}",
+        arguments = listOf(navArgument("id") { type = NavType.IntType })
+      ) { backStack ->
+        val productId = backStack.arguments?.getInt("id") ?: 0
         ProductDetailScreen(
+          productId = productId,
           navigation = navController
         )
       }
