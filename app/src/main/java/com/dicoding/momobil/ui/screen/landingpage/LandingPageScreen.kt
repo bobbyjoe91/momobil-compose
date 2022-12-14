@@ -58,7 +58,7 @@ fun LandingPageScreen(
             interactionSource = remember { MutableInteractionSource() },
             indication = null
           ) { focusManager.clearFocus() },
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally
       ) {
         Box(
@@ -80,7 +80,14 @@ fun LandingPageScreen(
             ),
             trailingIcon = {
               IconButton(
-                onClick = {}
+                onClick = {
+                  focusManager.clearFocus()
+                  if (searchKeyword.length > 3) {
+                    viewModel.searchProduct(searchKeyword)
+                  } else if (searchKeyword.isEmpty()) {
+                    viewModel.getAllProducts()
+                  }
+                }
               ) {
                 Icon(
                   imageVector = Icons.Default.Search,

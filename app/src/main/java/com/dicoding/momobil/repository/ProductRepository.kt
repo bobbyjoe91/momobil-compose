@@ -24,6 +24,14 @@ class ProductRepository {
     return productList[id - 1]
   }
 
+  fun getMobilBySearch(keyword: String): Flow<List<Mobil>> {
+    val searchResult = productList.filter { product ->
+      product.name.lowercase().contains(keyword)
+    }
+
+    return flowOf(searchResult)
+  }
+
   companion object {
     @Volatile
     private var instance: ProductRepository? = null

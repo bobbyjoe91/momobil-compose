@@ -28,4 +28,16 @@ class LandingPageViewModel(
         }
     }
   }
+
+  fun searchProduct(keyword: String) {
+    viewModelScope.launch {
+      productRepo.getMobilBySearch(keyword)
+        .catch {
+          _uiState.value = UiState.Error(it.message.toString())
+        }
+        .collect { searchResult ->
+          _uiState.value = UiState.Success(searchResult)
+        }
+    }
+  }
 }
