@@ -5,14 +5,19 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class CartRepository {
-  private val cartItems = mutableListOf<Mobil>()
+  private var cartItems = mutableListOf<Mobil>()
 
-  fun getAllCartItems(): Flow<List<Mobil>> {
+  fun getAllCartItems(): Flow<MutableList<Mobil>> {
     return flowOf(cartItems)
   }
 
   fun insertCarToCart(mobil: Mobil) {
     cartItems.add(mobil)
+  }
+
+  fun removeFromCart(itemIndex: Int): Flow<Boolean> {
+    cartItems.removeAt(itemIndex)
+    return flowOf(true)
   }
 
   companion object {

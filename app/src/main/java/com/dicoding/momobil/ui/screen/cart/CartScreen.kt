@@ -1,47 +1,68 @@
 package com.dicoding.momobil.ui.screen.cart
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.dicoding.momobil.di.Injector
+import com.dicoding.momobil.model.Mobil
+import com.dicoding.momobil.ui.ViewModelFactory
+import com.dicoding.momobil.ui.common.UiState
+import com.dicoding.momobil.ui.components.CartItem
 import com.dicoding.momobil.ui.theme.MomobilTheme
-import com.dicoding.momobil.ui.theme.TaxiSoftRed
 
 @Composable
 fun CartScreen(
-  navigation: NavHostController = rememberNavController()
+  navigation: NavHostController = rememberNavController(),
+  viewModel: CartViewModel = viewModel(
+    factory = ViewModelFactory(
+      cartRepo = Injector.injectCartRepository()
+    )
+  )
 ) {
-  Column(
+  viewModel.uiState.collectAsState(initial = UiState.Loading).value.let { uiStateValue ->
+    when (uiStateValue) {
+      is UiState.Loading -> {
+        viewModel.showAllItems()
+      }
+      is UiState.Success -> {
+        CartItemList(
+          state = uiStateValue.data,
+          onRemoveItem = { index: Int -> viewModel.removeFromCart(index) },
+        )
+      }
+      is UiState.Error -> {
+
+      }
+    }
+  }
+}
+
+@Composable
+fun CartItemList(
+  state: MutableList<Mobil>,
+  onRemoveItem: (Int) -> Unit,
+) {
+  LazyColumn(
     verticalArrangement = Arrangement.Center,
     horizontalAlignment = Alignment.CenterHorizontally
   ) {
-    Column(
-      verticalArrangement = Arrangement.Center,
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      Text(
-        text = "Cart Screen"
+    itemsIndexed(
+      state,
+      key = { _, product -> product.id }
+    ) { index, item ->
+      CartItem(
+        name = item.name,
+        imgUrl = item.images[0],
+        location = item.location,
+        price = item.price,
+        onDelete = { onRemoveItem(index) }
       )
-      Button(
-        onClick = {
-          navigation.navigate("About")
-        },
-        colors = ButtonDefaults.buttonColors(
-          backgroundColor = TaxiSoftRed
-        )
-      ) {
-        Text(
-          "To Product Detail",
-          color = Color.White
-        )
-      }
     }
   }
 }
