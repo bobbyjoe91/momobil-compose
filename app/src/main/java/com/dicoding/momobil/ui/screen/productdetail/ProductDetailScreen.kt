@@ -31,6 +31,7 @@ import com.dicoding.momobil.ui.theme.MomobilTheme
 import com.dicoding.momobil.ui.theme.TaxiSoftRed
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
+import com.google.accompanist.pager.rememberPagerState
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
@@ -45,6 +46,7 @@ fun ProductDetailScreen(
     )
   )
 ) {
+  val pagerState = rememberPagerState()
   when(
     val uiState = viewModel.uiState.collectAsState(initial = UiState.Loading).value
   ) {
@@ -61,10 +63,11 @@ fun ProductDetailScreen(
           .background(color = Color(0xFFECECEC))
           .verticalScroll(rememberScrollState()),
       ) {
-        HorizontalPager(
-          count = imagesSize
-        ) { index ->
-          Box {
+        Box {
+          HorizontalPager(
+            count = imagesSize,
+            state = pagerState
+          ) { index ->
             AsyncImage(
               model = uiState.data.images[index],
               contentDescription = "Product image $index",
@@ -73,15 +76,15 @@ fun ProductDetailScreen(
                 .fillMaxWidth()
                 .height(290.dp)
             )
-            Text(
-              "${index+1} / $imagesSize",
-              modifier = modifier
-                .background(Color.LightGray)
-                .padding(2.dp)
-                .clip(RoundedCornerShape(2.dp))
-                .align(Alignment.BottomEnd)
-            )
           }
+          Text(
+            "${pagerState.currentPage + 1} / $imagesSize",
+            modifier = modifier
+              .background(Color.LightGray)
+              .padding(5.dp)
+              .clip(RoundedCornerShape(5.dp))
+              .align(Alignment.BottomEnd)
+          )
         }
         Column(
           modifier = modifier
@@ -202,7 +205,7 @@ fun ProductDetailScreen(
           )
         ) {
           Text(
-            "AJUKAN SEKARANG",
+            "BELI SEKARANG",
             fontWeight = FontWeight.W700,
             color = Color.White
           )
