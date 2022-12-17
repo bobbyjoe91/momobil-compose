@@ -1,11 +1,13 @@
 package com.dicoding.momobil.ui.screen.cart
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -18,6 +20,7 @@ import com.dicoding.momobil.ui.theme.MomobilTheme
 
 @Composable
 fun CartScreen(
+  modifier: Modifier = Modifier,
   navigation: NavHostController = rememberNavController(),
   viewModel: CartViewModel = viewModel(
     factory = ViewModelFactory(
@@ -32,6 +35,7 @@ fun CartScreen(
       }
       is UiState.Success -> {
         CartItemList(
+          modifier = modifier.fillMaxSize(),
           state = uiStateValue.data,
           onRemoveItem = { index: Int -> viewModel.removeFromCart(index) },
         )
@@ -45,12 +49,15 @@ fun CartScreen(
 
 @Composable
 fun CartItemList(
+  modifier: Modifier,
   state: MutableList<Mobil>,
   onRemoveItem: (Int) -> Unit,
 ) {
   LazyColumn(
-    verticalArrangement = Arrangement.Center,
-    horizontalAlignment = Alignment.CenterHorizontally
+    modifier = modifier.padding(horizontal = 10.dp),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    contentPadding = PaddingValues(vertical = 10.dp),
+
   ) {
     itemsIndexed(
       state,
@@ -63,6 +70,10 @@ fun CartItemList(
         price = item.price,
         onDelete = { onRemoveItem(index) }
       )
+
+      if (index < state.lastIndex) {
+        Spacer(modifier = Modifier.height(10.dp))
+      }
     }
   }
 }
