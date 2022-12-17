@@ -1,5 +1,7 @@
 package com.dicoding.momobil.ui.components
 
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -13,6 +15,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -30,26 +34,44 @@ fun CartItem(
   modifier: Modifier = Modifier,
 ) {
   Card(
+    modifier = modifier
+      .height(100.dp)
+      .fillMaxWidth(),
+    shape = RoundedCornerShape(5.dp),
+    border = BorderStroke(0.2.dp, Color.Black),
     elevation = CardDefaults.cardElevation(5.dp)
   ) {
     Row(
+      modifier = modifier
+        .fillMaxSize()
+        .background(Color.White),
       horizontalArrangement = Arrangement.SpaceBetween,
       verticalAlignment = Alignment.CenterVertically
     ) {
-      AsyncImage(
-        modifier = modifier
-          .size(75.dp)
-          .clip(RoundedCornerShape(topStart = 5.dp, bottomStart = 5.dp)),
-        model = imgUrl,
-        contentDescription = "$name cart item"
-      )
-      Column {
-        Text(name)
-        Text(location)
-        Text(Helpers.toCurrency(price))
+      Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+      ) {
+        AsyncImage(
+          modifier = modifier
+            .size(100.dp)
+            .clip(RoundedCornerShape(topStart = 5.dp, bottomStart = 5.dp)),
+          contentScale = ContentScale.FillHeight,
+          model = imgUrl,
+          contentDescription = "$name cart item"
+        )
+        Spacer(modifier = modifier.width(15.dp))
+        Column {
+          Text(name)
+          Text(location)
+          Text(Helpers.toCurrency(price))
+        }
       }
-      IconButton(onClick = onDelete) {
+      IconButton(
+        onClick = onDelete,
+      ) {
         Icon(
+          modifier = modifier.size(30.dp),
           imageVector = Icons.Default.Delete,
           contentDescription = "Remove item",
           tint = TaxiSoftRed
