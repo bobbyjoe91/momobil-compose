@@ -18,6 +18,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -65,9 +67,22 @@ fun CartItem(
         )
         Spacer(modifier = modifier.width(15.dp))
         Column {
-          Text(name)
-          Text(location)
-          Text(Helpers.toCurrency(price))
+          Text(
+            name,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+          )
+          Spacer(modifier.height(5.dp))
+          Text(
+            location,
+            color = Color(0xFF607D8B),
+          )
+          Spacer(modifier.height(5.dp))
+          Text(
+            Helpers.toCurrency(price),
+            color = Color(0xFF4379B2),
+            fontWeight = FontWeight.W700,
+          )
         }
       }
       IconButton(
