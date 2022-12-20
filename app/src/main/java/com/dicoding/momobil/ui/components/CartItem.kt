@@ -2,6 +2,7 @@ package com.dicoding.momobil.ui.components
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
@@ -31,12 +32,14 @@ fun CartItem(
   location: String,
   price: Int,
   onDelete: () -> Unit,
+  onPress: () -> Unit,
   modifier: Modifier = Modifier,
 ) {
   Card(
     modifier = modifier
       .height(100.dp)
-      .fillMaxWidth(),
+      .fillMaxWidth()
+      .clickable { onPress() },
     shape = RoundedCornerShape(5.dp),
     border = BorderStroke(0.2.dp, Color.Black),
     elevation = CardDefaults.cardElevation(5.dp)
@@ -90,7 +93,8 @@ fun CartItemPreview() {
       imgUrl = "https://res.cloudinary.com/adirafinance/image/upload/c_scale,h_560,dpr_auto,f_auto/media/products/prod/img-p1648433231874-1_datcfo",
       location = "BEKASI",
       price = 463000000,
-      onDelete = {}
+      onDelete = {},
+      onPress = {}
     )
   }
 }
