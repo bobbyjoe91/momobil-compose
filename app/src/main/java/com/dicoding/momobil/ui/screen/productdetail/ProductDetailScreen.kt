@@ -1,5 +1,7 @@
 package com.dicoding.momobil.ui.screen.productdetail
 
+import android.content.Context
+import android.content.Intent
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
@@ -8,6 +10,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
+import androidx.compose.material.icons.filled.Share
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
@@ -15,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -47,6 +51,8 @@ fun ProductDetailScreen(
   )
 ) {
   val pagerState = rememberPagerState()
+  val context = LocalContext.current
+
   when(
     val uiState = viewModel.uiState.collectAsState(initial = UiState.Loading).value
   ) {
@@ -115,28 +121,48 @@ fun ProductDetailScreen(
 
         Row(
           verticalAlignment = Alignment.CenterVertically,
+          horizontalArrangement = Arrangement.SpaceBetween,
           modifier = modifier
             .fillMaxWidth()
             .background(color = Color.White)
             .padding(horizontal = 24.dp, vertical = 14.dp)
         ) {
-          Icon(
-            imageVector = Icons.Default.AccountCircle,
-            contentDescription = "Seller profile",
-            modifier = Modifier.size(48.dp)
-          )
-          Spacer(modifier = Modifier.width(14.dp))
-
-          Column {
-            Text(
-              text = uiState.data.sellerName,
-              fontWeight = FontWeight.W700,
-              fontSize = 16.sp
+          Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = modifier
+          ) {
+            Icon(
+              imageVector = Icons.Default.AccountCircle,
+              contentDescription = "Seller profile",
+              modifier = Modifier.size(48.dp)
             )
-            Text(
-              text = uiState.data.location,
-              color = Color(0xFFA0A0A0),
-              fontSize = 14.sp
+            Spacer(modifier = Modifier.width(14.dp))
+
+            Column {
+              Text(
+                text = uiState.data.sellerName,
+                fontWeight = FontWeight.W700,
+                fontSize = 16.sp
+              )
+              Text(
+                text = uiState.data.location,
+                color = Color(0xFFA0A0A0),
+                fontSize = 14.sp
+              )
+            }
+          }
+
+          IconButton(onClick = {
+            shareProduct(
+              context,
+              uiState.data.name,
+              "Halo! Cek ${uiState.data.name} ${uiState.data.year} ini. Mobil ${uiState.data.transmission.lowercase()} berbahan bakar ${uiState.data.fuel.lowercase()} ini cocok untuk Anda."
+            )
+          }) {
+            Icon(
+              imageVector = Icons.Default.Share,
+              contentDescription = "Share button",
+              modifier = Modifier.size(24.dp)
             )
           }
         }
@@ -246,4 +272,16 @@ fun ProductDetailScreenPreview() {
   MomobilTheme {
     ProductDetailScreen(1)
   }
+}
+
+private fun shareProduct(context: Context, name: String, message: String) {
+  val intent = Intent(Intent.ACTION_SEND).apply {
+    type = "text/plain"
+    putExtra(Intent.EXTRA_SUBJECT, "Momobil - $name")
+    putExtra(Intent.EXTRA_TEXT, message)
+  }
+
+  context.startActivity(
+    Intent.createChooser(intent, "Momobil - $name")
+  )
 }
