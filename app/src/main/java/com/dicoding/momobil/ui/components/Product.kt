@@ -87,7 +87,7 @@ fun ProductPreview() {
   MomobilTheme {
     Product(
       name = "HONDA CR-V 1.5 PRESTIGE TRB",
-      imgUrl = "https://res.cloudinary.com/adirafinance/image/upload/c_scale,h_560,dpr_auto,f_auto/media/products/prod/img-p1648433231874-1_datcfo",
+      imgUrl = "https://res.cloudinary.com/lelestaticassets/image/upload/c_scale,h_560,dpr_auto,f_auto/Dicoding%20Final%20Project/img-244345-1_f6ovyx_ftenyn.jpg",
       location = "BEKASI",
       price = 463000000
     )
