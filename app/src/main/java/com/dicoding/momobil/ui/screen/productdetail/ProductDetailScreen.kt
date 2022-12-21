@@ -33,8 +33,7 @@ import com.dicoding.momobil.di.Injector
 import com.dicoding.momobil.ui.ViewModelFactory
 import com.dicoding.momobil.ui.common.Helpers
 import com.dicoding.momobil.ui.common.UiState
-import com.dicoding.momobil.ui.theme.MomobilTheme
-import com.dicoding.momobil.ui.theme.TaxiSoftRed
+import com.dicoding.momobil.ui.theme.*
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
@@ -75,7 +74,7 @@ fun ProductDetailScreen(
       Column(
         modifier = modifier
           .fillMaxSize()
-          .background(color = Color(0xFFECECEC))
+          .background(color = TaxiWhite)
           .verticalScroll(rememberScrollState()),
       ) {
         Box {
@@ -115,12 +114,12 @@ fun ProductDetailScreen(
           Spacer(modifier = Modifier.height(10.dp))
           Text(
             "Nominal Harga",
-            color = Color(0xFFA0A0A0)
+            color = TaxiLightGray
           )
           Spacer(modifier = Modifier.height(5.dp))
           Text(
             text = Helpers.toCurrency(productDetail.price),
-            color = Color(0xFF4379B2),
+            color = TaxiDarkBlue,
             fontSize = 18.sp,
             fontWeight = FontWeight.W700
           )
@@ -155,7 +154,7 @@ fun ProductDetailScreen(
               )
               Text(
                 text = productDetail.location,
-                color = Color(0xFFA0A0A0),
+                color = TaxiLightGray,
                 fontSize = 14.sp
               )
             }
@@ -263,11 +262,11 @@ fun Specification(
   ) {
     Text(
       title,
-      color = Color(0xFF888888)
+      color = TaxiDarkGray
     )
     Text(
       text = data,
-      color = Color(0xFF333333),
+      color = TaxiDarkerGray,
       fontWeight = FontWeight.W700
     )
   }
