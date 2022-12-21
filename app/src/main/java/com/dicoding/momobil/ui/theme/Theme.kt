@@ -1,16 +1,9 @@
 package com.dicoding.momobil.ui.theme
 
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme
-import androidx.compose.material.darkColors
 import androidx.compose.material.lightColors
 import androidx.compose.runtime.Composable
-
-private val DarkColorPalette = darkColors(
-  primary = TaxiYellow,
-  primaryVariant = TaxiDarkYellow,
-  secondary = TaxiSoftRed
-)
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 
 private val LightColorPalette = lightColors(
   primary = TaxiYellow,
@@ -28,15 +21,15 @@ private val LightColorPalette = lightColors(
 )
 
 @Composable
-fun MomobilTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-  val colors = if (darkTheme) {
-    DarkColorPalette
-  } else {
-    LightColorPalette
-  }
+fun MomobilTheme(content: @Composable () -> Unit) {
+  val systemUi = rememberSystemUiController()
+  systemUi.setStatusBarColor(
+    color = TaxiYellow,
+    darkIcons = true
+  )
 
   MaterialTheme(
-    colors = colors,
+    colors = LightColorPalette,
     typography = Typography,
     shapes = Shapes,
     content = content
