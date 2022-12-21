@@ -43,7 +43,7 @@ fun CartScreen(
             .fillMaxSize(),
           navigation = navigation,
           state = uiStateValue.data,
-          onRemoveItem = { index: Int -> viewModel.removeFromCart(index) },
+          onRemoveItem = { item: Mobil -> viewModel.removeFromCart(item) },
         )
       }
       is UiState.Error -> {
@@ -57,10 +57,11 @@ fun CartScreen(
 fun CartItemList(
   modifier: Modifier,
   navigation: NavHostController,
-  state: MutableList<Mobil>,
-  onRemoveItem: (Int) -> Unit,
+  state: MutableSet<Mobil>,
+  onRemoveItem: (Mobil) -> Unit,
 ) {
   val cartContext = LocalContext.current
+  val stateMutableList = state.toMutableList()
 
   LazyColumn(
     modifier = modifier.padding(horizontal = 10.dp),
@@ -68,7 +69,7 @@ fun CartItemList(
     contentPadding = PaddingValues(vertical = 10.dp),
   ) {
     itemsIndexed(
-      state,
+      stateMutableList,
       key = { _, product -> product.id }
     ) { index, item ->
       val deleteMessage = stringResource(id = R.string.delete_message, item.name)
@@ -78,7 +79,7 @@ fun CartItemList(
         location = item.location,
         price = item.price,
         onDelete = {
-          onRemoveItem(index)
+          onRemoveItem(item)
           Toast.makeText(cartContext, deleteMessage, Toast.LENGTH_SHORT).show()
         },
         onPress = {
@@ -91,7 +92,7 @@ fun CartItemList(
         }
       )
 
-      if (index < state.lastIndex) {
+      if (index < stateMutableList.lastIndex) {
         Spacer(modifier = Modifier.height(10.dp))
       }
     }
