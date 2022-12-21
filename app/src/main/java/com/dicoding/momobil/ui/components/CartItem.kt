@@ -25,6 +25,8 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.dicoding.momobil.ui.common.Helpers
 import com.dicoding.momobil.ui.theme.MomobilTheme
+import com.dicoding.momobil.ui.theme.TaxiDarkBlue
+import com.dicoding.momobil.ui.theme.TaxiPaleTurquoise
 import com.dicoding.momobil.ui.theme.TaxiSoftRed
 
 @Composable
@@ -75,12 +77,12 @@ fun CartItem(
           Spacer(modifier.height(5.dp))
           Text(
             location,
-            color = Color(0xFF607D8B),
+            color = TaxiPaleTurquoise,
           )
           Spacer(modifier.height(5.dp))
           Text(
             Helpers.toCurrency(price),
-            color = Color(0xFF4379B2),
+            color = TaxiDarkBlue,
             fontWeight = FontWeight.W700,
           )
         }
