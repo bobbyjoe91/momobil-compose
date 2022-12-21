@@ -3,4 +3,20 @@
   <string name="dev_name">Bobby Jonathan</string>
   <string name="dev_email">bobby.jonathan75@gmail.com</string>
   <string name="dev_github">bobbyjoe91</string>
+  <string name="spesifikasi_mobil">Spesifikasi Mobil</string>
+  <string name="beli_sekarang">BELI SEKARANG</string>
+  <string name="cari_mobil">Cari mobil impianmu</string>
+  <string name="delete_message">%1$s dihapus dari daftar</string>
+  <string name="subject">Momobil - %1$s</string>
+  <string name="warna">Warna</string>
+  <string name="tahun_produksi">Tahun Produksi</string>
+  <string name="transmisi">Transmisi</string>
+  <string name="kilometer">Kilometer</string>
+  <string name="bahan_bakar">Bahan Bakar</string>
+  <string name="kapasitas_mesin">Kapasitas Mesin</string>
+  <string name="kapasitas_penumpang">Kapasitas Penumpang</string>
+  <string name="intent_message">
+    Halo! Cek %1$s %2$d ini. Mobil %3$s berbahan bakar %4$s ini cocok untuk Anda.
+  </string>
+  <string name="copyright">Momobil Compose © 2022</string>
 </resources>
