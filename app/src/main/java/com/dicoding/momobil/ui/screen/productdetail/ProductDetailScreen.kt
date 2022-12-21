@@ -19,6 +19,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -27,6 +28,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
+import com.dicoding.momobil.R
 import com.dicoding.momobil.di.Injector
 import com.dicoding.momobil.ui.ViewModelFactory
 import com.dicoding.momobil.ui.common.Helpers
@@ -61,7 +63,14 @@ fun ProductDetailScreen(
     }
     is UiState.Success -> {
       val productDetail = uiState.data
-      val imagesSize = uiState.data.images.size
+      val imagesSize = productDetail.images.size
+      val shareMessage = stringResource(
+        id = R.string.intent_message,
+        productDetail.name,
+        productDetail.year,
+        productDetail.transmission.lowercase(),
+        productDetail.fuel.lowercase()
+      )
 
       Column(
         modifier = modifier
@@ -75,7 +84,7 @@ fun ProductDetailScreen(
             state = pagerState
           ) { index ->
             AsyncImage(
-              model = uiState.data.images[index],
+              model = productDetail.images[index],
               contentDescription = "Product image $index",
               contentScale = ContentScale.Crop,
               modifier = modifier
@@ -99,7 +108,7 @@ fun ProductDetailScreen(
             .padding(horizontal = 24.dp, vertical = 20.dp)
         ) {
           Text(
-            text = uiState.data.name,
+            text = productDetail.name,
             fontSize = 20.sp,
             fontWeight = FontWeight.W700
           )
@@ -110,7 +119,7 @@ fun ProductDetailScreen(
           )
           Spacer(modifier = Modifier.height(5.dp))
           Text(
-            text = Helpers.toCurrency(uiState.data.price),
+            text = Helpers.toCurrency(productDetail.price),
             color = Color(0xFF4379B2),
             fontSize = 18.sp,
             fontWeight = FontWeight.W700
@@ -140,25 +149,23 @@ fun ProductDetailScreen(
 
             Column {
               Text(
-                text = uiState.data.sellerName,
+                text = productDetail.sellerName,
                 fontWeight = FontWeight.W700,
                 fontSize = 16.sp
               )
               Text(
-                text = uiState.data.location,
+                text = productDetail.location,
                 color = Color(0xFFA0A0A0),
                 fontSize = 14.sp
               )
             }
           }
 
-          IconButton(onClick = {
-            shareProduct(
-              context,
-              uiState.data.name,
-              "Halo! Cek ${uiState.data.name} ${uiState.data.year} ini. Mobil ${uiState.data.transmission.lowercase()} berbahan bakar ${uiState.data.fuel.lowercase()} ini cocok untuk Anda."
-            )
-          }) {
+          IconButton(
+            onClick = {
+              shareProduct(context, productDetail.name, shareMessage)
+            }
+          ) {
             Icon(
               imageVector = Icons.Default.Share,
               contentDescription = "Share button",
@@ -170,7 +177,7 @@ fun ProductDetailScreen(
         Spacer(modifier = modifier.height(7.dp))
 
         Text(
-          "Spesifikasi Mobil",
+          stringResource(R.string.spesifikasi_mobil),
           fontWeight = FontWeight.W700,
           fontSize = 14.sp,
           modifier = modifier
@@ -186,32 +193,32 @@ fun ProductDetailScreen(
             .padding(horizontal = 24.dp, vertical = 16.dp)
         ) {
           Specification(
-            title = "Warna",
-            data = uiState.data.color
+            title = stringResource(id = R.string.warna),
+            data = productDetail.color
           )
           Specification(
-            title = "Tahun Produksi",
-            data = uiState.data.year.toString()
+            title = stringResource(R.string.tahun_produksi),
+            data = productDetail.year.toString()
           )
           Specification(
-            title = "Transmisi",
-            data = uiState.data.transmission
+            title = stringResource(id = R.string.transmisi),
+            data = productDetail.transmission
           )
           Specification(
-            title = "Kilometer",
-            data = "${uiState.data.mileage} km"
+            title = stringResource(id = R.string.kilometer),
+            data = "${productDetail.mileage} km"
           )
           Specification(
-            title = "Bahan Bakar",
-            data = uiState.data.fuel
+            title = stringResource(id = R.string.bahan_bakar),
+            data = productDetail.fuel
           )
           Specification(
-            title = "Kapasitas Mesin",
-            data = "${uiState.data.engineCapacity} cc"
+            title = stringResource(id = R.string.kapasitas_mesin),
+            data = "${productDetail.engineCapacity} cc"
           )
           Specification(
-            title = "Kapasitas Penumpang",
-            data = "${uiState.data.seatCapacity} kursi"
+            title = stringResource(id = R.string.kapasitas_penumpang),
+            data = "${productDetail.seatCapacity} kursi"
           )
         }
 
@@ -231,7 +238,7 @@ fun ProductDetailScreen(
           )
         ) {
           Text(
-            "BELI SEKARANG",
+            stringResource(id = R.string.beli_sekarang),
             fontWeight = FontWeight.W700,
             color = Color.White
           )
@@ -275,13 +282,14 @@ fun ProductDetailScreenPreview() {
 }
 
 private fun shareProduct(context: Context, name: String, message: String) {
+  val subjectString = context.resources.getString(R.string.subject, name)
   val intent = Intent(Intent.ACTION_SEND).apply {
     type = "text/plain"
-    putExtra(Intent.EXTRA_SUBJECT, "Momobil - $name")
+    putExtra(Intent.EXTRA_SUBJECT, subjectString)
     putExtra(Intent.EXTRA_TEXT, message)
   }
 
   context.startActivity(
-    Intent.createChooser(intent, "Momobil - $name")
+    Intent.createChooser(intent, subjectString)
   )
 }

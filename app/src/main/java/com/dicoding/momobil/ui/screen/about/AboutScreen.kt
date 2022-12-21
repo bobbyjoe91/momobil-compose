@@ -82,7 +82,7 @@ fun AboutScreen(
     }
 
     Spacer(modifier = modifier.height(50.dp))
-    Text("Momobil Compose © 2022")
+    Text(stringResource(id = R.string.copyright))
   }
 }
 

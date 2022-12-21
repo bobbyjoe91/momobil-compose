@@ -8,11 +8,13 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.dicoding.momobil.R
 import com.dicoding.momobil.di.Injector
 import com.dicoding.momobil.model.Mobil
 import com.dicoding.momobil.ui.ViewModelFactory
@@ -69,6 +71,7 @@ fun CartItemList(
       state,
       key = { _, product -> product.id }
     ) { index, item ->
+      val deleteMessage = stringResource(id = R.string.delete_message, item.name)
       CartItem(
         name = item.name,
         imgUrl = item.images[0],
@@ -76,7 +79,7 @@ fun CartItemList(
         price = item.price,
         onDelete = {
           onRemoveItem(index)
-          Toast.makeText(cartContext, "${item.name} dihapus dari daftar", Toast.LENGTH_SHORT).show()
+          Toast.makeText(cartContext, deleteMessage, Toast.LENGTH_SHORT).show()
         },
         onPress = {
           navigation.popBackStack()
