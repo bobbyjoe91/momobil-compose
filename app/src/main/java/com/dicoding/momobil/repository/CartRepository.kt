@@ -5,9 +5,9 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
 class CartRepository {
-  private var cartItems = mutableListOf<Mobil>()
+  private var cartItems = mutableSetOf<Mobil>()
 
-  fun getAllCartItems(): Flow<MutableList<Mobil>> {
+  fun getAllCartItems(): Flow<MutableSet<Mobil>> {
     return flowOf(cartItems)
   }
 
@@ -15,8 +15,8 @@ class CartRepository {
     cartItems.add(mobil)
   }
 
-  fun removeFromCart(itemIndex: Int): Flow<Boolean> {
-    cartItems.removeAt(itemIndex)
+  fun removeFromCart(item: Mobil): Flow<Boolean> {
+    cartItems.remove(item)
     return flowOf(true)
   }
 

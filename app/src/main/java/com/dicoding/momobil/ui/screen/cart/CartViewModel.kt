@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 class CartViewModel(
   private val cartRepo: CartRepository
 ): ViewModel() {
-  private val _uiState: MutableStateFlow<UiState<MutableList<Mobil>>> = MutableStateFlow(UiState.Loading)
-  val uiState: StateFlow<UiState<MutableList<Mobil>>>
+  private val _uiState: MutableStateFlow<UiState<MutableSet<Mobil>>> = MutableStateFlow(UiState.Loading)
+  val uiState: StateFlow<UiState<MutableSet<Mobil>>>
     get() = _uiState
 
   fun showAllItems() {
@@ -22,7 +22,7 @@ class CartViewModel(
       _uiState.value = UiState.Loading
       cartRepo.getAllCartItems()
         .collect { cartItems ->
-          val copy = mutableListOf<Mobil>()
+          val copy = mutableSetOf<Mobil>()
           copy.addAll(cartItems)
 
           _uiState.value = UiState.Success(copy)
@@ -30,9 +30,9 @@ class CartViewModel(
     }
   }
 
-  fun removeFromCart(itemIndex: Int) {
+  fun removeFromCart(item: Mobil) {
     viewModelScope.launch {
-      cartRepo.removeFromCart(itemIndex)
+      cartRepo.removeFromCart(item)
         .catch {
           _uiState.value = UiState.Error(it.message.toString())
         }

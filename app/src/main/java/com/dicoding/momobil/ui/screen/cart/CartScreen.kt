@@ -1,16 +1,22 @@
 package com.dicoding.momobil.ui.screen.cart
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -38,13 +44,32 @@ fun CartScreen(
         viewModel.showAllItems()
       }
       is UiState.Success -> {
-        CartItemList(
-          modifier = modifier
-            .fillMaxSize(),
-          navigation = navigation,
-          state = uiStateValue.data,
-          onRemoveItem = { index: Int -> viewModel.removeFromCart(index) },
-        )
+        if (uiStateValue.data.isNotEmpty()) {
+          CartItemList(
+            modifier = modifier.fillMaxSize(),
+            navigation = navigation,
+            state = uiStateValue.data,
+            onRemoveItem = { item: Mobil -> viewModel.removeFromCart(item) },
+          )
+        } else {
+          Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Image(
+              painterResource(id = R.drawable.dream_car),
+              contentDescription = "dream car",
+              contentScale = ContentScale.Fit,
+              modifier = modifier.size(250.dp)
+            )
+            Text(
+              stringResource(id = R.string.empty_cart),
+              fontSize = 16.sp,
+              fontWeight = FontWeight.W700
+            )
+          }
+        }
       }
       is UiState.Error -> {
 
@@ -57,10 +82,11 @@ fun CartScreen(
 fun CartItemList(
   modifier: Modifier,
   navigation: NavHostController,
-  state: MutableList<Mobil>,
-  onRemoveItem: (Int) -> Unit,
+  state: MutableSet<Mobil>,
+  onRemoveItem: (Mobil) -> Unit,
 ) {
   val cartContext = LocalContext.current
+  val stateMutableList = state.toMutableList()
 
   LazyColumn(
     modifier = modifier.padding(horizontal = 10.dp),
@@ -68,7 +94,7 @@ fun CartItemList(
     contentPadding = PaddingValues(vertical = 10.dp),
   ) {
     itemsIndexed(
-      state,
+      stateMutableList,
       key = { _, product -> product.id }
     ) { index, item ->
       val deleteMessage = stringResource(id = R.string.delete_message, item.name)
@@ -78,7 +104,7 @@ fun CartItemList(
         location = item.location,
         price = item.price,
         onDelete = {
-          onRemoveItem(index)
+          onRemoveItem(item)
           Toast.makeText(cartContext, deleteMessage, Toast.LENGTH_SHORT).show()
         },
         onPress = {
@@ -91,7 +117,7 @@ fun CartItemList(
         }
       )
 
-      if (index < state.lastIndex) {
+      if (index < stateMutableList.lastIndex) {
         Spacer(modifier = Modifier.height(10.dp))
       }
     }
