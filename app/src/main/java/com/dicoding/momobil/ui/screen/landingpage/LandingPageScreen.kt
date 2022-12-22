@@ -13,6 +13,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -49,15 +50,32 @@ fun LandingPageScreen(
     factory = ViewModelFactory(Injector.injectProductRepository())
   )
 ) {
-  val (searchKeyword, setSearchKeyword) = remember { mutableStateOf("") }
   val focusRequester = remember { FocusRequester() }
   val focusManager = LocalFocusManager.current
+
+  val (searchKeyword, setSearchKeyword) = remember { mutableStateOf("") }
+  val (isUsingSearch, setIsUsingSearch) = remember { mutableStateOf(false) }
+
   val onSearchPressed = {
     focusManager.clearFocus()
+
     if (searchKeyword.length > 3) {
+      setIsUsingSearch(true)
       viewModel.searchProduct(searchKeyword)
-    } else if (searchKeyword.isEmpty()) {
+    } else if (searchKeyword.isBlank()) {
       viewModel.getAllProducts()
+    }
+  }
+
+  val onClearSearch = {
+    focusManager.clearFocus()
+    setSearchKeyword("")
+    viewModel.getAllProducts()
+  }
+
+  LaunchedEffect(searchKeyword) {
+    if (searchKeyword.isBlank()) {
+      setIsUsingSearch(false)
     }
   }
 
@@ -110,15 +128,11 @@ fun LandingPageScreen(
               onSearch = { onSearchPressed() }
             ),
             trailingIcon = {
-              IconButton(
-                onClick = { onSearchPressed() }
-              ) {
-                Icon(
-                  imageVector = Icons.Default.Search,
-                  tint = Color.Black,
-                  contentDescription = "Search icon"
-                )
-              }
+              SearchTrailingIcon(
+                isUsingSearch = isUsingSearch,
+                onSearchPressed = { onSearchPressed() },
+                onClearSearch = { onClearSearch() }
+              )
             },
             shape = RoundedCornerShape(5.dp),
             colors = TextFieldDefaults.textFieldColors(
@@ -178,6 +192,35 @@ fun LandingPageScreen(
       }
     }
     is UiState.Error -> {}
+  }
+}
+
+@Composable
+fun SearchTrailingIcon(
+  isUsingSearch: Boolean,
+  onSearchPressed: () -> Unit,
+  onClearSearch: () -> Unit
+) {
+  if (!isUsingSearch) {
+    IconButton(
+      onClick = { onSearchPressed() }
+    ) {
+      Icon(
+        imageVector = Icons.Default.Search,
+        tint = Color.Black,
+        contentDescription = "Search icon"
+      )
+    }
+  } else {
+    IconButton(
+      onClick = { onClearSearch() }
+    ) {
+      Icon(
+        imageVector = Icons.Default.Close,
+        tint = Color.Black,
+        contentDescription = "Clear icon"
+      )
+    }
   }
 }
 
