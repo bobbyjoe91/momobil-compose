@@ -9,6 +9,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -43,13 +44,32 @@ fun CartScreen(
         viewModel.showAllItems()
       }
       is UiState.Success -> {
-        CartItemList(
-          modifier = modifier
-            .fillMaxSize(),
-          navigation = navigation,
-          state = uiStateValue.data,
-          onRemoveItem = { item: Mobil -> viewModel.removeFromCart(item) },
-        )
+        if (uiStateValue.data.isNotEmpty()) {
+          CartItemList(
+            modifier = modifier.fillMaxSize(),
+            navigation = navigation,
+            state = uiStateValue.data,
+            onRemoveItem = { item: Mobil -> viewModel.removeFromCart(item) },
+          )
+        } else {
+          Column(
+            modifier = modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
+          ) {
+            Image(
+              painterResource(id = R.drawable.dream_car),
+              contentDescription = "dream car",
+              contentScale = ContentScale.Fit,
+              modifier = modifier.size(250.dp)
+            )
+            Text(
+              stringResource(id = R.string.empty_cart),
+              fontSize = 16.sp,
+              fontWeight = FontWeight.W700
+            )
+          }
+        }
       }
       is UiState.Error -> {
 
@@ -68,58 +88,38 @@ fun CartItemList(
   val cartContext = LocalContext.current
   val stateMutableList = state.toMutableList()
 
-  if (stateMutableList.isNotEmpty()) {
-    LazyColumn(
-      modifier = modifier.padding(horizontal = 10.dp),
-      horizontalAlignment = Alignment.CenterHorizontally,
-      contentPadding = PaddingValues(vertical = 10.dp),
-    ) {
-      itemsIndexed(
-        stateMutableList,
-        key = { _, product -> product.id }
-      ) { index, item ->
-        val deleteMessage = stringResource(id = R.string.delete_message, item.name)
-        CartItem(
-          name = item.name,
-          imgUrl = item.images[0],
-          location = item.location,
-          price = item.price,
-          onDelete = {
-            onRemoveItem(item)
-            Toast.makeText(cartContext, deleteMessage, Toast.LENGTH_SHORT).show()
-          },
-          onPress = {
-            navigation.popBackStack()
-            navigation.navigate("ProductDetail/${item.id}") {
-              popUpTo("LandingPage") { saveState = true }
-              launchSingleTop = true
-              restoreState = true
-            }
+  LazyColumn(
+    modifier = modifier.padding(horizontal = 10.dp),
+    horizontalAlignment = Alignment.CenterHorizontally,
+    contentPadding = PaddingValues(vertical = 10.dp),
+  ) {
+    itemsIndexed(
+      stateMutableList,
+      key = { _, product -> product.id }
+    ) { index, item ->
+      val deleteMessage = stringResource(id = R.string.delete_message, item.name)
+      CartItem(
+        name = item.name,
+        imgUrl = item.images[0],
+        location = item.location,
+        price = item.price,
+        onDelete = {
+          onRemoveItem(item)
+          Toast.makeText(cartContext, deleteMessage, Toast.LENGTH_SHORT).show()
+        },
+        onPress = {
+          navigation.popBackStack()
+          navigation.navigate("ProductDetail/${item.id}") {
+            popUpTo("LandingPage") { saveState = true }
+            launchSingleTop = true
+            restoreState = true
           }
-        )
-
-        if (index < stateMutableList.lastIndex) {
-          Spacer(modifier = Modifier.height(10.dp))
         }
+      )
+
+      if (index < stateMutableList.lastIndex) {
+        Spacer(modifier = Modifier.height(10.dp))
       }
-    }
-  } else {
-    Column(
-      modifier = modifier.fillMaxSize(),
-      verticalArrangement = Arrangement.Center,
-      horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-      Image(
-        painterResource(id = R.drawable.no_result),
-        contentDescription = "no search result",
-        modifier = modifier.size(150.dp)
-      )
-      Spacer(modifier = modifier.height(5.dp))
-      Text(
-        stringResource(id = R.string.empty_cart),
-        fontSize = 16.sp,
-        fontWeight = FontWeight.W700
-      )
     }
   }
 }
