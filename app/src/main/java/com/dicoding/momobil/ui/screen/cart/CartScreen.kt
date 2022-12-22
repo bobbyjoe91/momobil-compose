@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -28,6 +29,7 @@ import com.dicoding.momobil.ui.ViewModelFactory
 import com.dicoding.momobil.ui.common.UiState
 import com.dicoding.momobil.ui.components.CartItem
 import com.dicoding.momobil.ui.theme.MomobilTheme
+import com.dicoding.momobil.ui.theme.TaxiSoftRed
 
 @Composable
 fun CartScreen(
@@ -43,6 +45,16 @@ fun CartScreen(
     when (uiStateValue) {
       is UiState.Loading -> {
         viewModel.showAllItems()
+
+        Column(
+          modifier = modifier.fillMaxSize(),
+          verticalArrangement = Arrangement.Center,
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+          CircularProgressIndicator(
+            color = TaxiSoftRed
+          )
+        }
       }
       is UiState.Success -> {
         if (uiStateValue.data.isNotEmpty()) {

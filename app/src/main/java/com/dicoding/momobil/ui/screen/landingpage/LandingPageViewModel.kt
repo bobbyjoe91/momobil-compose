@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dicoding.momobil.model.Mobil
 import com.dicoding.momobil.repository.ProductRepository
 import com.dicoding.momobil.ui.common.UiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -24,6 +25,7 @@ class LandingPageViewModel(
           _uiState.value = UiState.Error(it.message.toString())
         }
         .collect { productList ->
+          delay(2000L)
           _uiState.value = UiState.Success(productList)
         }
     }
@@ -36,6 +38,7 @@ class LandingPageViewModel(
           _uiState.value = UiState.Error(it.message.toString())
         }
         .collect { searchResult ->
+          delay(2000L)
           _uiState.value = UiState.Success(searchResult)
         }
     }

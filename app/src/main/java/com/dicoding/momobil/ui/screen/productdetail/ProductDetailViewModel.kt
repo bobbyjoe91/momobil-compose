@@ -6,6 +6,7 @@ import com.dicoding.momobil.model.Mobil
 import com.dicoding.momobil.repository.CartRepository
 import com.dicoding.momobil.repository.ProductRepository
 import com.dicoding.momobil.ui.common.UiState
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -20,7 +21,7 @@ class ProductDetailViewModel(
 
   fun getProductById(mobilId: Int) {
     viewModelScope.launch {
-      _uiState.value = UiState.Loading
+      delay(2000L)
       _uiState.value = UiState.Success(productRepo.getMobilById(mobilId))
     }
   }

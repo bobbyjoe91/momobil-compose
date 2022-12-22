@@ -60,6 +60,16 @@ fun ProductDetailScreen(
   ) {
     is UiState.Loading -> {
       viewModel.getProductById(productId)
+
+      Column(
+        modifier = modifier.fillMaxSize(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+      ) {
+        CircularProgressIndicator(
+          color = TaxiSoftRed
+        )
+      }
     }
     is UiState.Success -> {
       val productDetail = uiState.data
