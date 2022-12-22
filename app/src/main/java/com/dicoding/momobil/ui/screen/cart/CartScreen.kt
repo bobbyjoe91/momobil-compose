@@ -1,16 +1,21 @@
 package com.dicoding.momobil.ui.screen.cart
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -63,38 +68,58 @@ fun CartItemList(
   val cartContext = LocalContext.current
   val stateMutableList = state.toMutableList()
 
-  LazyColumn(
-    modifier = modifier.padding(horizontal = 10.dp),
-    horizontalAlignment = Alignment.CenterHorizontally,
-    contentPadding = PaddingValues(vertical = 10.dp),
-  ) {
-    itemsIndexed(
-      stateMutableList,
-      key = { _, product -> product.id }
-    ) { index, item ->
-      val deleteMessage = stringResource(id = R.string.delete_message, item.name)
-      CartItem(
-        name = item.name,
-        imgUrl = item.images[0],
-        location = item.location,
-        price = item.price,
-        onDelete = {
-          onRemoveItem(item)
-          Toast.makeText(cartContext, deleteMessage, Toast.LENGTH_SHORT).show()
-        },
-        onPress = {
-          navigation.popBackStack()
-          navigation.navigate("ProductDetail/${item.id}") {
-            popUpTo("LandingPage") { saveState = true }
-            launchSingleTop = true
-            restoreState = true
+  if (stateMutableList.isNotEmpty()) {
+    LazyColumn(
+      modifier = modifier.padding(horizontal = 10.dp),
+      horizontalAlignment = Alignment.CenterHorizontally,
+      contentPadding = PaddingValues(vertical = 10.dp),
+    ) {
+      itemsIndexed(
+        stateMutableList,
+        key = { _, product -> product.id }
+      ) { index, item ->
+        val deleteMessage = stringResource(id = R.string.delete_message, item.name)
+        CartItem(
+          name = item.name,
+          imgUrl = item.images[0],
+          location = item.location,
+          price = item.price,
+          onDelete = {
+            onRemoveItem(item)
+            Toast.makeText(cartContext, deleteMessage, Toast.LENGTH_SHORT).show()
+          },
+          onPress = {
+            navigation.popBackStack()
+            navigation.navigate("ProductDetail/${item.id}") {
+              popUpTo("LandingPage") { saveState = true }
+              launchSingleTop = true
+              restoreState = true
+            }
           }
-        }
-      )
+        )
 
-      if (index < stateMutableList.lastIndex) {
-        Spacer(modifier = Modifier.height(10.dp))
+        if (index < stateMutableList.lastIndex) {
+          Spacer(modifier = Modifier.height(10.dp))
+        }
       }
+    }
+  } else {
+    Column(
+      modifier = modifier.fillMaxSize(),
+      verticalArrangement = Arrangement.Center,
+      horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+      Image(
+        painterResource(id = R.drawable.no_result),
+        contentDescription = "no search result",
+        modifier = modifier.size(150.dp)
+      )
+      Spacer(modifier = modifier.height(5.dp))
+      Text(
+        stringResource(id = R.string.empty_cart),
+        fontSize = 16.sp,
+        fontWeight = FontWeight.W700
+      )
     }
   }
 }

@@ -15,6 +15,8 @@
   <string name="bahan_bakar">Bahan Bakar</string>
   <string name="kapasitas_mesin">Kapasitas Mesin</string>
   <string name="kapasitas_penumpang">Kapasitas Penumpang</string>
+  <string name="no_search_result">Mobil %1$s yang kamu cari tidak ada…</string>
+  <string name="empty_cart">Daftar kosong. Ayo tambahkan mobil impianmu!</string>
   <string name="intent_message">
     Halo! Cek %1$s %2$d ini. Mobil %3$s berbahan bakar %4$s ini cocok untuk Anda.
   </string>
