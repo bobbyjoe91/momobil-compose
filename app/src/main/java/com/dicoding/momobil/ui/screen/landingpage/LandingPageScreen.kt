@@ -16,6 +16,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
@@ -54,8 +55,8 @@ fun LandingPageScreen(
   val focusRequester = remember { FocusRequester() }
   val focusManager = LocalFocusManager.current
 
-  val (searchKeyword, setSearchKeyword) = remember { mutableStateOf("") }
-  val (isUsingSearch, setIsUsingSearch) = remember { mutableStateOf(false) }
+  val (searchKeyword, setSearchKeyword) = rememberSaveable { mutableStateOf("") }
+  val (isUsingSearch, setIsUsingSearch) = rememberSaveable { mutableStateOf(false) }
 
   val onSearchPressed = {
     focusManager.clearFocus()
@@ -81,7 +82,7 @@ fun LandingPageScreen(
   }
 
   when (
-    val uiStateValue = viewModel.uiState.collectAsState(initial = UiState.Loading).value
+    val uiStateValue = viewModel.uiState.collectAsState().value
   ) {
     is UiState.Loading -> {
       viewModel.getAllProducts()
