@@ -18,6 +18,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dicoding.momobil.R
+import com.dicoding.momobil.navigation.Screen
 import com.dicoding.momobil.ui.theme.TaxiYellow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -59,14 +60,17 @@ fun Header(
       )
     },
     actions = {
-      if (currentRoute != "About" && currentRoute != "Cart") {
+      if (
+        currentRoute != Screen.About.routeName
+        && currentRoute != Screen.Cart.routeName
+      ) {
         IconButton(
-          onClick = { navigation.navigate("Cart") }
+          onClick = { navigation.navigate(Screen.Cart.routeName) }
         ) {
           Icon(
             imageVector = Icons.Default.ShoppingCart,
             tint = Color.Black,
-            contentDescription = "Cart"
+            contentDescription = Screen.Cart.routeName
           )
         }
       }

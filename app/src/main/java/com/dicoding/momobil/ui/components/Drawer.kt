@@ -10,9 +10,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import com.dicoding.momobil.R
+import com.dicoding.momobil.navigation.Screen
 import com.dicoding.momobil.ui.theme.MomobilTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,8 +41,8 @@ fun Drawer(
       modifier = Modifier
         .clickable {
           navigation?.currentBackStackEntry?.destination?.route?.let { screenName ->
-            if (screenName != "About") {
-              navigation.navigate("About")
+            if (screenName != Screen.About.routeName) {
+              navigation.navigate(Screen.About.routeName)
             }
           }
 
@@ -57,7 +60,7 @@ fun Drawer(
       )
       Spacer(modifier = Modifier.width(32.dp))
       Text(
-        text = "About Us",
+        text = stringResource(R.string.about),
         style = MaterialTheme.typography.subtitle2
       )
     }

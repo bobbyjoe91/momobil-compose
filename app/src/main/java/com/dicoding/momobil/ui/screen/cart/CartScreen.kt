@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import com.dicoding.momobil.R
 import com.dicoding.momobil.di.Injector
 import com.dicoding.momobil.model.Mobil
+import com.dicoding.momobil.navigation.Screen
 import com.dicoding.momobil.ui.ViewModelFactory
 import com.dicoding.momobil.ui.common.UiState
 import com.dicoding.momobil.ui.components.CartItem
@@ -109,8 +110,10 @@ fun CartItemList(
         },
         onPress = {
           navigation.popBackStack()
-          navigation.navigate("ProductDetail/${item.id}") {
-            popUpTo("LandingPage") { saveState = true }
+          navigation.navigate(
+            Screen.ProductDetail.getRouteWithId(item.id)
+          ) {
+            popUpTo(Screen.LandingPage.routeName) { saveState = true }
             launchSingleTop = true
             restoreState = true
           }

@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.dicoding.momobil.navigation.Screen
 import com.dicoding.momobil.ui.components.Drawer
 import com.dicoding.momobil.ui.components.Header
 import com.dicoding.momobil.ui.screen.about.AboutScreen
@@ -52,16 +53,16 @@ fun MomobilApp(
   ) {
     NavHost(
       navController = navController,
-      startDestination = "LandingPage",
+      startDestination = Screen.LandingPage.routeName,
       modifier = Modifier.padding(it)
     ) {
-      composable("LandingPage") {
+      composable(Screen.LandingPage.routeName) {
         LandingPageScreen(
           navigation = navController
         )
       }
       composable(
-        "ProductDetail/{id}",
+        Screen.ProductDetail.routeName,
         arguments = listOf(navArgument("id") { type = NavType.IntType })
       ) { backStack ->
         val productId = backStack.arguments?.getInt("id") ?: 0
@@ -70,10 +71,10 @@ fun MomobilApp(
           navigation = navController
         )
       }
-      composable("About") {
+      composable(Screen.About.routeName) {
         AboutScreen()
       }
-      composable("Cart") {
+      composable(Screen.Cart.routeName) {
         CartScreen(
           navigation = navController
         )

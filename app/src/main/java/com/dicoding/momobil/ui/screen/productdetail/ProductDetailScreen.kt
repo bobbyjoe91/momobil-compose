@@ -30,6 +30,7 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import com.dicoding.momobil.R
 import com.dicoding.momobil.di.Injector
+import com.dicoding.momobil.navigation.Screen
 import com.dicoding.momobil.ui.ViewModelFactory
 import com.dicoding.momobil.ui.common.Helpers
 import com.dicoding.momobil.ui.common.UiState
@@ -229,7 +230,7 @@ fun ProductDetailScreen(
             .background(Color.White)
             .padding(14.dp),
           onClick = {
-            navigation.navigate("Cart")
+            navigation.navigate(Screen.Cart.routeName)
             viewModel.purchaseCar(productDetail)
           },
           colors = ButtonDefaults.buttonColors(

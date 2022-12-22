@@ -35,6 +35,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.dicoding.momobil.R
 import com.dicoding.momobil.di.Injector
+import com.dicoding.momobil.navigation.Screen
 import com.dicoding.momobil.ui.ViewModelFactory
 import com.dicoding.momobil.ui.common.UiState
 import com.dicoding.momobil.ui.components.Product
@@ -160,7 +161,9 @@ fun LandingPageScreen(
                 location = productData.location,
                 price = productData.price,
                 modifier = modifier.clickable {
-                  navigation.navigate("ProductDetail/${productData.id}")
+                  navigation.navigate(
+                    Screen.ProductDetail.getRouteWithId(productData.id)
+                  )
                 }
               )
             }
