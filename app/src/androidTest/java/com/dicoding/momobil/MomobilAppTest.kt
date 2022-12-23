@@ -55,6 +55,48 @@ class MomobilAppTest {
   }
 
   @Test
+  fun navHost_searchHonda() {
+    testRule.waitUntil(4000L) {
+      testRule
+        .onAllNodesWithTag("search_input")
+        .fetchSemanticsNodes().size == 1
+    }
+    testRule.onNodeWithTag("search_input").performTextInput("honda")
+    testRule.onNodeWithTag("search_button").performClick()
+
+    testRule.waitUntil(4000L) {
+      testRule
+        .onAllNodesWithContentDescription("product")
+        .fetchSemanticsNodes().isNotEmpty()
+    }
+
+    testRule.onAllNodesWithContentDescription("product").assertCountEquals(2)
+  }
+
+  @Test
+  fun navHost_noSearchResult() {
+    testRule.waitUntil(4000L) {
+      testRule
+        .onAllNodesWithTag("search_input")
+        .fetchSemanticsNodes().isNotEmpty()
+    }
+    testRule.onNodeWithTag("search_input").performTextInput("mitsubishi lancer")
+    testRule.onNodeWithTag("search_button").performClick()
+
+    testRule.waitUntil(4000L) {
+      testRule
+        .onAllNodesWithText(
+          testRule.activity.getString(R.string.no_search_result, "mitsubishi lancer")
+        )
+        .fetchSemanticsNodes().size == 1
+    }
+
+    testRule.onNodeWithText(
+      testRule.activity.getString(R.string.no_search_result, "mitsubishi lancer")
+    ).assertIsDisplayed()
+  }
+
+  @Test
   fun navHost_selectProduct_navigateToProductDetail_buyProduct_chooseAnotherProduct_clearCart() {
     navigation.assertCurrentRouteName(Screen.LandingPage.routeName)
 
@@ -113,5 +155,8 @@ class MomobilAppTest {
     testRule.onNodeWithTag("remove_product").performClick()
 
     testRule.onAllNodesWithTag("cart_item").assertCountEquals(0)
+    testRule.onNodeWithText(
+      testRule.activity.getString(R.string.empty_cart)
+    ).assertIsDisplayed()
   }
 }
