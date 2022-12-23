@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -43,7 +44,8 @@ fun CartItem(
     modifier = modifier
       .height(100.dp)
       .fillMaxWidth()
-      .clickable { onPress() },
+      .clickable { onPress() }
+      .testTag("cart_item"),
     shape = RoundedCornerShape(5.dp),
     border = BorderStroke(0.2.dp, Color.Black),
     elevation = CardDefaults.cardElevation(5.dp)
@@ -88,6 +90,7 @@ fun CartItem(
         }
       }
       IconButton(
+        modifier = modifier.testTag("remove_product"),
         onClick = onDelete,
       ) {
         Icon(
