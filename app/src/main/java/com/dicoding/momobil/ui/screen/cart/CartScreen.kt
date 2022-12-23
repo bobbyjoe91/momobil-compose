@@ -56,6 +56,17 @@ fun CartScreen(
           )
         }
       }
+      is UiState.FetchlessLoading -> {
+        Column(
+          modifier = modifier.fillMaxSize(),
+          verticalArrangement = Arrangement.Center,
+          horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+          CircularProgressIndicator(
+            color = TaxiSoftRed
+          )
+        }
+      }
       is UiState.Success -> {
         if (uiStateValue.data.isNotEmpty()) {
           CartItemList(

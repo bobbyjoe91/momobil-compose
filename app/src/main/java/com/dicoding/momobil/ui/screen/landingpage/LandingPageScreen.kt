@@ -23,6 +23,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
@@ -73,8 +74,8 @@ fun LandingPageScreen(
 
   val onClearSearch = {
     focusManager.clearFocus()
-    setSearchKeyword("")
     viewModel.getAllProducts()
+    setSearchKeyword("")
   }
 
   LaunchedEffect(searchKeyword) {
@@ -88,7 +89,8 @@ fun LandingPageScreen(
   ) {
     is UiState.Loading -> {
       viewModel.getAllProducts()
-
+    }
+    is UiState.FetchlessLoading -> {
       Column(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.Center,
@@ -145,7 +147,8 @@ fun LandingPageScreen(
             ),
             modifier = Modifier
               .fillMaxWidth()
-              .focusRequester(focusRequester),
+              .focusRequester(focusRequester)
+              .testTag("search_input"),
           )
         }
 
@@ -211,6 +214,7 @@ fun SearchTrailingIcon(
 ) {
   if (!isUsingSearch) {
     IconButton(
+      modifier = Modifier.testTag("search_button"),
       onClick = { onSearchPressed() }
     ) {
       Icon(

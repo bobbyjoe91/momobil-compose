@@ -20,6 +20,7 @@ class LandingPageViewModel(
 
   fun getAllProducts() {
     viewModelScope.launch {
+      _uiState.value = UiState.FetchlessLoading
       productRepo.showAllProduct()
         .catch {
           _uiState.value = UiState.Error(it.message.toString())
@@ -33,6 +34,7 @@ class LandingPageViewModel(
 
   fun searchProduct(keyword: String) {
     viewModelScope.launch {
+      _uiState.value = UiState.FetchlessLoading
       productRepo.getMobilBySearch(keyword)
         .catch {
           _uiState.value = UiState.Error(it.message.toString())
