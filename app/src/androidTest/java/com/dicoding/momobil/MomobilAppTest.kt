@@ -108,5 +108,10 @@ class MomobilAppTest {
       .performClick()
 
     testRule.onAllNodesWithTag("cart_item").assertCountEquals(2)
+
+    testRule.onAllNodesWithTag("remove_product").onFirst().performClick()
+    testRule.onNodeWithTag("remove_product").performClick()
+
+    testRule.onAllNodesWithTag("cart_item").assertCountEquals(0)
   }
 }
