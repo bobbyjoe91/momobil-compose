@@ -277,7 +277,7 @@ object FakeProductList {
     ),
     Mobil(
       id = 15,
-      name = "TOYOTA AVANZA 1.3 G",
+      name = "TOYOTA AVANZA 1.3 R",
       description = "",
       price = 300000000,
       images = listOf(

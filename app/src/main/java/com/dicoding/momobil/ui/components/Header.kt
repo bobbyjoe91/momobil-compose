@@ -11,8 +11,11 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -37,10 +40,12 @@ fun Header(
     ),
     navigationIcon = {
       IconButton(
+        modifier = Modifier.semantics(mergeDescendants = true) {
+          contentDescription = "toggle_drawer"
+        },
         onClick = {
           coroutineScope.launch {
             scaffoldState.drawerState.open()
-            println("currentpage: $currentRoute")
           }
         }
       ) {
@@ -65,12 +70,13 @@ fun Header(
         && currentRoute != Screen.Cart.routeName
       ) {
         IconButton(
+          modifier = Modifier.semantics { contentDescription = "cart_page" },
           onClick = { navigation.navigate(Screen.Cart.routeName) }
         ) {
           Icon(
             imageVector = Icons.Default.ShoppingCart,
             tint = Color.Black,
-            contentDescription = Screen.Cart.routeName
+            contentDescription = "cart_page"
           )
         }
       }

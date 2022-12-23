@@ -20,6 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -86,7 +88,10 @@ fun ProductDetailScreen(
         modifier = modifier
           .fillMaxSize()
           .background(color = TaxiWhite)
-          .verticalScroll(rememberScrollState()),
+          .verticalScroll(rememberScrollState())
+          .semantics {
+            contentDescription = "product_detail_page"
+          },
       ) {
         Box {
           HorizontalPager(
@@ -238,7 +243,8 @@ fun ProductDetailScreen(
           modifier = modifier
             .fillMaxWidth()
             .background(Color.White)
-            .padding(14.dp),
+            .padding(14.dp)
+            .semantics { contentDescription = "buy_now" },
           onClick = {
             navigation.navigate(Screen.Cart.routeName)
             viewModel.purchaseCar(productDetail)
